@@ -16,6 +16,7 @@ import javax.swing.event.*;
    This class is used to work with a JComboBox that contains the Ticker list from AutoComplete.showVariants and
    appears when entering characters in JTextField symbol
  */
+
 public class AutoCompleteSetup {
 
     private static boolean isAdjusting(JComboBox cbInput) {
@@ -30,7 +31,7 @@ public class AutoCompleteSetup {
     }
 
     public static void setupAutoComplete(final JTextField txtInput) {
-        //final ComboBoxPaneledCellEditor model = new ComboBoxPaneledCellEditor()
+
         final DefaultComboBoxModel model = new DefaultComboBoxModel();
         final JComboBox cbInput = new JComboBox(model) {
             public Dimension getPreferredSize() {
@@ -56,7 +57,6 @@ public class AutoCompleteSetup {
                         String st = cbInput.getSelectedItem().toString();
                         String selectedTicker = st.substring(0, st.indexOf(' '));
                         txtInput.setText(selectedTicker);
-                        System.out.println(selectedTicker);
                     }
                 }
             }
@@ -92,19 +92,11 @@ public class AutoCompleteSetup {
                         String st = cbInput.getSelectedItem().toString();
                         String selectedTicker = st.substring(0, st.indexOf(' '));
                         txtInput.setText(selectedTicker);
-//                         SwingUtilities.invokeLater(new Runnable() {
-//                        public void run() {
                         cbInput.setPopupVisible(false);
-//                      }
-//                   });
                     }
                 }
                 if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
-//                     SwingUtilities.invokeLater(new Runnable() {
-//                        public void run() {
                     cbInput.setPopupVisible(false);
-//                      }
-//                   });
                 }
                 setAdjusting(cbInput, false);
             }
@@ -121,19 +113,16 @@ public class AutoCompleteSetup {
             public void insertUpdate(DocumentEvent e) {
 
                 updateList();
-
             }
 
             public void removeUpdate(DocumentEvent e) {
 
                 updateList();
-
             }
 
             public void changedUpdate(DocumentEvent e) {
 
                 updateList();
-
             }
 
             /* 
@@ -179,23 +168,12 @@ public class AutoCompleteSetup {
                 }
 
                 cbInput.updateUI();
-                //cbInput.hidePopup();
-                System.out.println("model size:" + model.getSize());
-                System.out.println("text:" + txtInput.getText());
 
-//                 SwingUtilities.invokeLater(new Runnable() {
-//                        public void run() {
-//              
-//                       
-//                    }
-//                   });
                 try {
                     cbInput.setPopupVisible(model.getSize() > 0);
                 } catch (Exception e) {
                     // e.printStackTrace();
                 }
-
-                System.out.println("FINAL");
 
                 setAdjusting(cbInput, false);
             }

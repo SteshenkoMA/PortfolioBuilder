@@ -28,7 +28,7 @@ import autoComplete.AutoCompleteSetup;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
-import main.PortfolioBuilder;
+import main.PortflioBuilder;
 import parsers.BuilderJSON;
 import parsers.ParserJSON;
 import parsers.ParserQuotes;
@@ -54,8 +54,7 @@ import parsers.ParserQuotes;
  ||__ __ __ __ __ __ __||__ __ __ __ __ __ __||
  |__ __ __ __ __ __ __ __ __ __ __ __ __ __ __|
         
-*/
-
+ */
 public class InputPanelSetup {
 
     JPanel inputPanel;
@@ -72,44 +71,45 @@ public class InputPanelSetup {
         this.stockSymbol = stockSymbol;
         this.jsonFormat = jsonFormat;
 
-        setupRedPanel();
+        setupInputPanel();
 
     }
 
-    private void setupRedPanel() {
+    private void setupInputPanel() {
 
         Object rowData[][] = {{"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""},
-                              {"", ""}
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""},
+        {"", ""}
         };
-        
+
         Object columnNames[] = {"Stock symbols", "%"};
-        JTable table = new JTable(new DefaultTableModel(rowData, columnNames));
+        JTable symbolsTable = new JTable(new DefaultTableModel(rowData, columnNames));
 
         Object rowData1[][] = {{"10000"}};
         Object columnNames1[] = {"Balance"};
         JTable table1 = new JTable(rowData1, columnNames1);
 
         JScrollPane scrollPane1 = new JScrollPane(table1);
-        table1.setPreferredScrollableViewportSize(new Dimension(0, 0));
         scrollPane1.setPreferredSize(new Dimension(0, 0));
+        table1.setPreferredScrollableViewportSize(new Dimension(0, 0));
+        table1.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
-        JScrollPane scrollPane = new JScrollPane(table);
-        table.setPreferredScrollableViewportSize(new Dimension(0, 0));
-        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+        JScrollPane scrollPane = new JScrollPane(symbolsTable);
+        symbolsTable.setPreferredScrollableViewportSize(new Dimension(0, 0));
+        symbolsTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
         scrollPane.setPreferredSize(new Dimension(0, 0));
 
         stockSymbol = new JTextField();
         AutoCompleteSetup.setupAutoComplete(stockSymbol);
-        setUpSportColumn(table, table.getColumnModel().getColumn(0));
+        setUpSportColumn(symbolsTable, symbolsTable.getColumnModel().getColumn(0));
 
         JButton button = new JButton("Add row");
         button.setPreferredSize(new Dimension(0, 0));
@@ -123,7 +123,7 @@ public class InputPanelSetup {
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                DefaultTableModel model = (DefaultTableModel) table.getModel();
+                DefaultTableModel model = (DefaultTableModel) symbolsTable.getModel();
                 model.addRow(new Object[]{"", ""});
             }
         });
@@ -135,8 +135,8 @@ public class InputPanelSetup {
                 Thread t = new Thread() {
                     public void run() {
 
-                        if (table.isEditing()) {
-                            table.getCellEditor().stopCellEditing();
+                        if (symbolsTable.isEditing()) {
+                            symbolsTable.getCellEditor().stopCellEditing();
                         }
 
                         JScrollPane b = (JScrollPane) portfoliosPanel.getComponent(0);
@@ -152,8 +152,8 @@ public class InputPanelSetup {
 
                         ParserQuotes quotes = new ParserQuotes(item.getTickers(), item.getStart(), item.getEnd());
 
-                        PortfolioBuilder portfolio = new PortfolioBuilder(item.getBalance(), item.getTickers(), item.getPercentWeight(), quotes.getQuotesList(), statisticsPanel);
-        
+                        PortflioBuilder portfolio = new PortflioBuilder(item.getBalance(), item.getTickers(), item.getPercentWeight(), quotes.getQuotesList(), statisticsPanel);
+
                     }
                 };
                 t.start();
@@ -169,13 +169,12 @@ public class InputPanelSetup {
                     public void run() {
 
                         PortfolioList.readFile();
-                        System.out.println("PortfolioList" + PortfolioList.getList());
-
+        
                         if (jsonFormat != null) {
 
                             PortfolioList.addTo(jsonFormat);
                             PortfolioList.writeInFile();
-   
+
                             JScrollPane a = (JScrollPane) portfoliosPanel.getComponent(0);
 
                             JViewport viewport = a.getViewport();
@@ -192,81 +191,91 @@ public class InputPanelSetup {
             }
         });
 
-        TableRenderDemo newContentPane = new TableRenderDemo();
+        DatesPanel newContentPane = new DatesPanel();
         newContentPane.setPreferredSize(new Dimension(0, 0));
 
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
         c.fill = GridBagConstraints.BOTH;
+
         c.gridx = 0;
         c.gridy = 0;
         c.gridwidth = 2;
         c.gridheight = 1;
-        c.weightx = 0.20;
-        c.weighty = 0.20;
-        
+        c.weightx = 0.1;
+        c.weighty = 0.1;
+
+        inputPanel.add(scrollPane1, c);
+
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 2;
+        c.gridheight = 1;
+        c.weightx = 0.15;
+        c.weighty = 0.15;
+
         inputPanel.add(newContentPane, c);
-            
+
         c.gridwidth = 2;
         c.gridheight = 1;
         c.gridx = 0;
-        c.gridy = 1;
+        c.gridy = 2;
         c.weightx = 0.50;
         c.weighty = 0.50;
-        
+
         inputPanel.add(scrollPane, c);
 
         c.insets = new Insets(0, 0, 0, 1);
         c.gridwidth = 1;
         c.gridheight = 1;
         c.gridx = 0;
-        c.gridy = 2;
+        c.gridy = 3;
         c.weightx = 0.07;
         c.weighty = 0.07;
-        
+
         inputPanel.add(button, c);
 
         c.insets = new Insets(0, 0, 0, 1);
         c.gridwidth = 1;
         c.gridheight = 1;
         c.gridx = 1;
-        c.gridy = 2;
+        c.gridy = 3;
         c.weightx = 0.07;
         c.weighty = 0.07;
-        
+
         inputPanel.add(button2, c);
 
         c.insets = new Insets(1, 0, 0, 1);
         c.gridwidth = 2;
         c.gridheight = 1;
         c.gridx = 0;
-        c.gridy = 3;
+        c.gridy = 4;
         c.weightx = 0.07;
         c.weighty = 0.07;
-        
+
         inputPanel.add(button3, c);
 
-        table.getModel().addTableModelListener(new TableModelListener() {
+        symbolsTable.getModel().addTableModelListener(new TableModelListener() {
             @Override
             public void tableChanged(TableModelEvent e) {
 
                 int sum = 0;
 
-                for (int count = 0; count < table.getModel().getRowCount(); count++) {
+                for (int count = 0; count < symbolsTable.getModel().getRowCount(); count++) {
 
-                    String percent = table.getModel().getValueAt(count, 1).toString();
+                    String percent = symbolsTable.getModel().getValueAt(count, 1).toString();
 
                     if (!percent.equals("")) {
 
                         int percentInt = Integer.parseInt(percent);
                         sum += percentInt;
-                        
+
                     }
                 }
-  
-                table.getColumnModel().getColumn(1).setHeaderValue(sum + "%");
-                table.getTableHeader().repaint();
+
+                symbolsTable.getColumnModel().getColumn(1).setHeaderValue(sum + "%");
+                symbolsTable.getTableHeader().repaint();
 
             }
         });
@@ -275,33 +284,40 @@ public class InputPanelSetup {
             @Override
             public void componentResized(ComponentEvent e) {
 
-                int tW = table.getWidth();
+                int tW = symbolsTable.getWidth();
                 int r = tW / 4;
 
-                table.getColumnModel().getColumn(1).setMaxWidth(r);
-                table.getColumnModel().getColumn(1).setPreferredWidth(r);
-                table.getColumnModel().getColumn(1).setWidth(r);
+                symbolsTable.getColumnModel().getColumn(1).setMaxWidth(r);
+                symbolsTable.getColumnModel().getColumn(1).setPreferredWidth(r);
+                symbolsTable.getColumnModel().getColumn(1).setWidth(r);
 
             }
         });
 
-        table.addFocusListener(new java.awt.event.FocusAdapter() {
+        symbolsTable.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                table.getSelectionModel().clearSelection();
+                symbolsTable.getSelectionModel().clearSelection();
 
             }
+        });
+
+        table1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                table1.getSelectionModel().clearSelection();
+
+            }
+
         });
 
     }
 
     public void setUpSportColumn(JTable table,
-            
-        TableColumn sportColumn) {
+            TableColumn sportColumn) {
         sportColumn.setCellEditor(new DefaultCellEditor(stockSymbol));
         DefaultTableCellRenderer renderer = new DefaultTableCellRenderer();
         renderer.setToolTipText("Click for combo box");
         sportColumn.setCellRenderer(renderer);
-        
+
     }
 
 }

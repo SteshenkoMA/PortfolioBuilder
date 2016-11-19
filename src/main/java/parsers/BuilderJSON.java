@@ -11,38 +11,45 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JViewport;
-import panelSetup.TableRenderDemo;
+import panelSetup.DatesPanel;
 
 /**
  *
  * @author maxim
  */
+
+/*
+  Данный класс строит json строку
+ 
+  This class builds a json string
+ */
 public class BuilderJSON {
 
     private String jsonFormat;
 
-    public BuilderJSON(JPanel redPanel) {
+    public BuilderJSON(JPanel inputPanel) {
 
-        TableRenderDemo n = (TableRenderDemo) redPanel.getComponent(0);
-        JScrollPane x = (JScrollPane) redPanel.getComponent(1);
+        JScrollPane x = (JScrollPane) inputPanel.getComponent(0);
         JViewport viewport = x.getViewport();
+        JTable balanceTable = (JTable) viewport.getView();
 
-        JTable mytable = (JTable) viewport.getView();
-        JTable table1 = n.getTable1();
-        JTable table = n.getTable();
+        DatesPanel datePanel = (DatesPanel) inputPanel.getComponent(1);
+        JTable dateTable = datePanel.getTable();
 
-        String balance = table1.getModel().getValueAt(0, 0).toString();
-        String dateFrom = buildDate(table, "From");
-        String dateTo = buildDate(table, "To");
+        JScrollPane x2 = (JScrollPane) inputPanel.getComponent(2);
+        JViewport viewport2 = x2.getViewport();
+        JTable symbolTable = (JTable) viewport2.getView();
 
-        Map<String, String> assetsList = buildAssetsList(mytable);
+        String balance = balanceTable.getModel().getValueAt(0, 0).toString();
+        Map<String, String> assetsList = buildAssetsList(symbolTable);
+        String dateFrom = buildDate(dateTable, "From");
+        String dateTo = buildDate(dateTable, "To");
 
         jsonFormat = buildJsonFormat(balance, dateFrom, dateTo, assetsList);
-        System.out.println(jsonFormat);
-
+ 
     }
-    
-private Map<String, String> buildAssetsList(JTable table1) {
+
+    private Map<String, String> buildAssetsList(JTable table1) {
 
         Map<String, String> assetsList = new HashMap<>();
 
@@ -61,7 +68,7 @@ private Map<String, String> buildAssetsList(JTable table1) {
 
     }
 
-private String buildDate(JTable table, String FromTo) {
+    private String buildDate(JTable table, String FromTo) {
 
         int row = 0;
 
@@ -98,7 +105,7 @@ private String buildDate(JTable table, String FromTo) {
         return date;
     }
 
-private String buildJsonFormat(String balance, String dateFrom, String dateTo, Map<String, String> assetsList) {
+    private String buildJsonFormat(String balance, String dateFrom, String dateTo, Map<String, String> assetsList) {
 
         String jsonFormat = "";
 
@@ -107,8 +114,6 @@ private String buildJsonFormat(String balance, String dateFrom, String dateTo, M
                 + "\"balance\":\"" + balance + "\",";
 
         String arrays = "\"array\":[";
-
-        System.out.println(assetsList.entrySet());
 
         for (Map.Entry<String, String> entry : assetsList.entrySet()) {
 
@@ -133,8 +138,8 @@ private String buildJsonFormat(String balance, String dateFrom, String dateTo, M
         return jsonFormat;
 
     }
-    
-public String getJsonFormat() {
+
+    public String getJsonFormat() {
         return jsonFormat;
     }
 

@@ -26,14 +26,12 @@ import org.jfree.data.xy.XYDataset;
 
    This class is used to display a сhart
  */
-
 public class LineChart extends ApplicationFrame {
 
     public static ChartPanel chartPanel;
-    
+
     //Создаем график из данных, добавляем на chartPanel
     //Builds chart from data, adds to chartPanel
-
     public LineChart(Map<Date, Double> dataItems, String applicationTitle, String chartTitle) {
         super(applicationTitle);
 
@@ -44,14 +42,13 @@ public class LineChart extends ApplicationFrame {
 
         chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new Dimension(0, 0));
-        
+
         setContentPane(chartPanel);
 
     }
 
     //Обрабатываем данные 
     //Process the data
-    
     private TimeSeriesCollection createDataset(Map<Date, Double> dataItems) {
         TimeSeries s1 = new TimeSeries("Price");
 
@@ -62,7 +59,7 @@ public class LineChart extends ApplicationFrame {
             Double value = entry.getValue();
 
             s1.add(new Millisecond(key), value);
-     
+
         }
 
         TimeSeriesCollection dataset = new TimeSeriesCollection();
@@ -73,7 +70,6 @@ public class LineChart extends ApplicationFrame {
 
     //Настраиваем особенности отображения графика
     //Customize the appearance of chart
-    
     private void customizeChart(JFreeChart chart) {
 
         XYPlot plot = (XYPlot) chart.getPlot();
@@ -84,7 +80,7 @@ public class LineChart extends ApplicationFrame {
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 Number x = dataset.getX(series, item);
                 Number y = dataset.getY(series, item);
-    
+
                 String balance = String.format("%1$,.0f", y.doubleValue());
 
                 return (sdf.format(x) + " " + balance);
@@ -102,8 +98,8 @@ public class LineChart extends ApplicationFrame {
         plot.setRangeAxisLocation(AxisLocation.BOTTOM_OR_RIGHT);
 
         DateAxis axis = (DateAxis) plot.getDomainAxis();
-        
-        axis.setDateFormatOverride(new SimpleDateFormat("dd/MM/yyyy")); //MM->01, MMM->Jan
+
+        axis.setDateFormatOverride(new SimpleDateFormat("dd/MM/yyyy"));
         axis.setAutoRange(true);
 
     }

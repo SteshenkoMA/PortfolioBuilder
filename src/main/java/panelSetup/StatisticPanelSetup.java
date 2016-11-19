@@ -33,8 +33,7 @@ import javax.swing.JTable;
  ||__ __ __ __ __ __ __||__ __ __ __ __ __ __||
  |__ __ __ __ __ __ __ __ __ __ __ __ __ __ __|
         
-*/
-
+ */
 public class StatisticPanelSetup {
 
     JPanel statisticsPanel;
@@ -67,13 +66,13 @@ public class StatisticPanelSetup {
             }
         });
 
-               table.setPreferredScrollableViewportSize(new Dimension(0, 0));
+        table.setPreferredScrollableViewportSize(new Dimension(0, 0));
         JScrollPane scrollPane = new JScrollPane(table);
-scrollPane.setPreferredSize(new Dimension(0, 0));
+        scrollPane.setPreferredSize(new Dimension(0, 0));
 
-         GridBagConstraints c = new GridBagConstraints();
+        GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
-        c.insets = new Insets(0, 0, 0, 0);
+        c.insets = new Insets(1, 0, 0, 0);
         c.gridwidth = 2;
         c.gridheight = 1;
         c.fill = GridBagConstraints.BOTH;
@@ -81,7 +80,7 @@ scrollPane.setPreferredSize(new Dimension(0, 0));
         c.gridy = 0;
         c.weightx = 0.8;
         c.weighty = 0.8;
-                
+
         statisticsPanel.add(scrollPane, c);
 
     }

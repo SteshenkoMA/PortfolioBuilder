@@ -23,9 +23,8 @@ import javax.swing.table.TableModel;
   Класс, который формирует портфель, исходя из баланса и веса каждой акции
    
   THis class creates the portfolio based on the balance and weight of each ticker
-*/
-
-public class PortfolioBuilder {
+ */
+public class PortflioBuilder {
 
     double balance;
     ArrayList<String> tickers;
@@ -37,7 +36,7 @@ public class PortfolioBuilder {
     private Map<String, String> statistic = new TreeMap();
     JPanel statisticsPanel;
 
-    public PortfolioBuilder(double balance, ArrayList<String> tickers, Map<String, Double> percentWeight, Map<String, Map> quotesList, JPanel statisticsPanel) {
+    public PortflioBuilder(double balance, ArrayList<String> tickers, Map<String, Double> percentWeight, Map<String, Map> quotesList, JPanel statisticsPanel) {
 
         this.balance = balance;
         this.tickers = tickers;
@@ -59,7 +58,7 @@ public class PortfolioBuilder {
 
         JViewport viewport = b.getViewport();
         JTable s = (JTable) viewport.getView();
- 
+
         TableModel x = s.getModel();
 
         x.setValueAt(statistic.get("IB"), 0, 1);
@@ -74,8 +73,7 @@ public class PortfolioBuilder {
     /* 
       Метод выполняет все вычисления
       Method that does all the calculations
-    */
-    
+     */
     public Map<Date, Double> buildPortfolio() {
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -89,7 +87,7 @@ public class PortfolioBuilder {
         }
 
         for (String e : tickers) { //Производим вычисления для каждого тикера
-            calculate(e);          //Do calctulactions for each ticker
+            calculateChanges(e);          //Do calctulactions for each ticker
         }
 
         int sz = dates.size();
@@ -131,10 +129,8 @@ public class PortfolioBuilder {
 
     //Исторические даты для каждого тикера могут отличаеться, поэтому сравниваем их между собой,
     //и заносим в dates только те даты, которые есть у каждого тикера
-    
     //Historical dates for each ticker may vary, so compare them to each other
     //and add in dates, only those dates that each ticker have
-    
     public Set<Date> makeIntersection() {
 
         ArrayList dateSets = new ArrayList();
@@ -154,10 +150,8 @@ public class PortfolioBuilder {
     }
 
     //Метод, который вычисляет как исторически изменялась сумма денег, вложенная в этот 
-    
     //A method that calculates how historically changed the amount of money invested in this asset
-    
-    public void calculate(String symbol) {
+    public void calculateChanges(String symbol) {
 
         final ArrayList<Double> changes = new ArrayList<>();
         double money = balance * percentWeight.get(symbol) / 100;
@@ -167,7 +161,7 @@ public class PortfolioBuilder {
         double start = quotes.get(firstDate);
 
         for (Date d : dates) {
-         
+
             double c = quotes.get(d);
             double price = (c / start) * money; //Формула
 
@@ -180,9 +174,7 @@ public class PortfolioBuilder {
     }
 
     //Метод, вычисляющий максимальную просадку 
-    
     //Method that calculates the maximum drawdown
-    
     public String calculateDD(Map<Date, Double> result) {
 
         double DD = 0d;
@@ -223,9 +215,7 @@ public class PortfolioBuilder {
     }
 
     //Метод возвращаюзий ArrayList формата "Тикер - Его вес в портфеле"
-    
     //Method that returns the ArrayList in the format of "Ticker - Its weight in the portfolio"
-    
     public ArrayList<String> getTicekrsAndWeights() {
 
         ArrayList<String> tickersANDpercentWeights = new ArrayList<String>();
@@ -241,9 +231,7 @@ public class PortfolioBuilder {
     }
 
     //Создаем график, добавляем на graphPanel
-    
     //Create a chart, than add it to graphPanel
-    
     public void buildChart(Map<Date, Double> dataItems) {
 
         LineChart chart = new LineChart(dataItems, "PortfolioBuilder", getTicekrsAndWeights().toString());

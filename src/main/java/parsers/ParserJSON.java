@@ -12,7 +12,7 @@ import java.util.*;
  * Created by maxim on 05.06.16.
  */
 //Класс, считывающий строку в формате JSON, которую мы передаем из GUI
-
+//Class that reads a JSON-formatted string that we are passing from GUI
 public class ParserJSON {
 
     private GregorianCalendar start;
@@ -46,6 +46,7 @@ public class ParserJSON {
     }
 
     //Метод считывает строку и присваивает значения (start,end), balance, tickers, percentWeight
+    //Method reads a string and assigns values (start,end) balance, tickers, percentWeight
     void parse(String jsonFormat) {
 
         try {
@@ -57,7 +58,8 @@ public class ParserJSON {
             start = convertDateString(dateFrom);
             end = convertDateString(dateTo);
 
-            balance = js.getDouble("balance");
+            String bal = js.getString("balance");
+            balance = Double.parseDouble(bal);
 
             JSONArray array = js.getJSONArray("array");
 
@@ -78,6 +80,7 @@ public class ParserJSON {
     }
 
     //Метод, приводящий даты из строки к классу GregorianCalendar
+    //Method that convert the date from the string to the GregorianCalendar class
     private GregorianCalendar convertDateString(String dateString) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         Date date = null;

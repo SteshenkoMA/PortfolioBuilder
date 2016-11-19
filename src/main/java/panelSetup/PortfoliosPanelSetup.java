@@ -23,7 +23,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
-import main.PortfolioBuilder;
+import main.PortflioBuilder;
 import parsers.ParserJSON;
 import parsers.ParserQuotes;
 
@@ -48,8 +48,7 @@ import parsers.ParserQuotes;
  ||__ __ __ __ __ __ __||__ __ __ __ __ __ __||
  |__ __ __ __ __ __ __ __ __ __ __ __ __ __ __|
         
-*/
-
+ */
 public class PortfoliosPanelSetup {
 
     JPanel portfoliosPanel;
@@ -62,11 +61,11 @@ public class PortfoliosPanelSetup {
         this.statisticsPanel = statisticsPanel;
         this.jsonFormat = jsonFormat;
 
-        setupBlackPanel();
+        setupPortfoliosPanel();
 
     }
 
-    private void setupBlackPanel() {
+    private void setupPortfoliosPanel() {
 
         DefaultListModel listModel = new DefaultListModel();
 
@@ -84,23 +83,23 @@ public class PortfoliosPanelSetup {
 
         list.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent me) {
-                if (SwingUtilities.isRightMouseButton(me) // if right mouse button clicked
+                if (SwingUtilities.isRightMouseButton(me)
                         && !list.isSelectionEmpty()) {
-           
+
                     popupMenu.removeAll();
                     int row = list.locationToIndex(me.getPoint());
-                    popupMenu.add(list.getModel().getElementAt(row).toString());        //   inside selected item bounds
+                    popupMenu.add(list.getModel().getElementAt(row).toString());
                     popupMenu.show(list, me.getX(), me.getY());
                 }
             }
 
             public void mouseReleased(MouseEvent me) {
-                if (SwingUtilities.isRightMouseButton(me) // if right mouse button clicked
+                if (SwingUtilities.isRightMouseButton(me)
                         && !list.isSelectionEmpty()) {
-          
+
                     popupMenu.removeAll();
                     int row = list.locationToIndex(me.getPoint());
-                    popupMenu.add(list.getModel().getElementAt(row).toString());        //   inside selected item bounds
+                    popupMenu.add(list.getModel().getElementAt(row).toString());
                     popupMenu.show(list, me.getX(), me.getY());
                 }
             }
@@ -186,7 +185,7 @@ public class PortfoliosPanelSetup {
                         ParserJSON item = new ParserJSON(jsonFormat);
                         GregorianCalendar today = new GregorianCalendar();
                         ParserQuotes quotes = new ParserQuotes(item.getTickers(), item.getStart(), today);
-                        PortfolioBuilder portfolio = new PortfolioBuilder(item.getBalance(), item.getTickers(), item.getPercentWeight(), quotes.getQuotesList(), statisticsPanel);
+                        PortflioBuilder portfolio = new PortflioBuilder(item.getBalance(), item.getTickers(), item.getPercentWeight(), quotes.getQuotesList(), statisticsPanel);
                     }
                 };
                 t.start();

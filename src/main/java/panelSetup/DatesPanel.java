@@ -16,9 +16,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -28,11 +26,12 @@ import java.util.Collections;
 import java.util.Locale;
 import java.util.TimeZone;
 
-/**
- * TableRenderDemo is just like TableDemo, except that it explicitly initializes
- * column sizes and it uses a combo box as an editor for the Sport column.
+/*
+ Класс, который настраивает панель в выбором дат
+
+ The class, which configures the date choice panel
  */
-public class TableRenderDemo extends JPanel {
+public class DatesPanel extends JPanel {
 
     private ArrayList<String> daysList;
     private ArrayList<String> monthsList;
@@ -40,17 +39,12 @@ public class TableRenderDemo extends JPanel {
     private String[] days;
     private String[] months;
     private String[] yearsStart;
-    private JTable table1;
     private JTable table;
 
     public JTable getTable() {
         return table;
-    };
-    
-    public JTable getTable1() {
-        return table1;
-    };
-        
+    }
+
     public static int getCurrentDay() {
         Calendar calendar = java.util.Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         calendar.setTime(new java.util.Date());
@@ -69,13 +63,11 @@ public class TableRenderDemo extends JPanel {
         return calendar.get(java.util.Calendar.YEAR);
     }
 
-    private boolean DEBUG = false; 
-
-    public TableRenderDemo() {
+    public DatesPanel() {
         super(new GridBagLayout());
-       
+
         table = new JTable(new MyTableModel());
-        table.setOpaque(true);
+        table.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 
         table.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
@@ -83,33 +75,15 @@ public class TableRenderDemo extends JPanel {
             }
         });
 
-        //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
         scrollPane.setOpaque(true);
-
-        Object rowData1[][] = {{"10000"}};
-        Object columnNames1[] = {"Balance"};
-        table1 = new JTable(
-                rowData1, columnNames1);
-        table1.setOpaque(true);
-
-        table1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                table1.getSelectionModel().clearSelection();
-
-            }
-        });
-
-        JScrollPane scrollPane1 = new JScrollPane(table1);
-        scrollPane1.setOpaque(true);
-
 
         buildDates();
 
         setUpSportColumn(table, table.getColumnModel().getColumn(1), days);
         setUpSportColumn(table, table.getColumnModel().getColumn(2), months);
         setUpSportColumn(table, table.getColumnModel().getColumn(3), yearsStart);
-      
+
         GridBagConstraints c = new GridBagConstraints();
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.insets = new Insets(0, 0, 0, 0);
@@ -118,37 +92,22 @@ public class TableRenderDemo extends JPanel {
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 1;
-        c.weightx = 0.70;
-        c.weighty = 0.70;
-        
-        add(scrollPane, c);
-        
-        c.gridwidth = 2;
-        c.gridheight = 1;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.weightx = 0.30;
-        c.weighty = 0.30;
-        
-        add(scrollPane1, c);
-   
-    }
+        c.weightx = 1.00;
+        c.weighty = 1.00;
 
-    /*
-     * This method picks good column sizes.
-     * If all column heads are wider than the column's cells'
-     * contents, then you can just use column.sizeWidthToFit().
-     */
+        add(scrollPane, c);
+
+    }
 
     public void setUpSportColumn(JTable table,
             TableColumn sportColumn, String[] dates) {
+
         buildDates();
-        //Set up the editor for the sport cells.
+
         JComboBox comboBox = new JComboBox(dates);
 
         sportColumn.setCellEditor(new DefaultCellEditor(comboBox));
 
-        //Set up tool tips for the sport cells.
         DefaultTableCellRenderer renderer
                 = new DefaultTableCellRenderer();
         renderer.setToolTipText("Click for combo box");
@@ -186,20 +145,10 @@ public class TableRenderDemo extends JPanel {
             return data[row][col];
         }
 
-        /*
-         * JTable uses this method to determine the default renderer/
-         * editor for each cell.  If we didn't implement this method,
-         * then the last column would contain text ("true"/"false"),
-         * rather than a check box.
-         */
         public Class getColumnClass(int c) {
             return getValueAt(0, c).getClass();
         }
 
-        /*
-         * Don't need to implement this method unless your table's
-         * editable.
-         */
         public boolean isCellEditable(int row, int col) {
             //Note that the data/cell address is constant,
             //no matter where the cell appears onscreen.
@@ -215,43 +164,16 @@ public class TableRenderDemo extends JPanel {
          * data can change.
          */
         public void setValueAt(Object value, int row, int col) {
-            if (DEBUG) {
-                System.out.println("Setting value at " + row + "," + col
-                        + " to " + value
-                        + " (an instance of "
-                        + value.getClass() + ")");
-            }
 
             data[row][col] = value;
             fireTableCellUpdated(row, col);
 
-            if (DEBUG) {
-                System.out.println("New value of data:");
-                printDebugData();
-            }
         }
 
-        private void printDebugData() {
-            int numRows = getRowCount();
-            int numCols = getColumnCount();
-
-            for (int i = 0; i < numRows; i++) {
-                System.out.print("    row " + i + ":");
-                for (int j = 0; j < numCols; j++) {
-                    System.out.print("  " + data[i][j]);
-                }
-                System.out.println();
-            }
-            System.out.println("--------------------------");
-        }
     }
 
-    /**
-     * Create the GUI and show it. For thread safety, this method should be
-     * invoked from the event-dispatching thread.
-     */
     private void buildDates() {
-        
+
         daysList = new ArrayList<String>();
         for (int a = 1; a <= 31; a++) {
             daysList.add(Integer.toString(a));

@@ -12,27 +12,25 @@ import org.json.JSONObject;
 
    This class is used to display a list of tickers that contain
    the characters entered by the user in JTextField
-*/
-
+ */
 public class AutoComplete {
-    
+
     public static JSONArray tickersList = new JSONArray();
-    
-    public static void showVariants(String symbol){
-     
-   
-        
-    lab1: try {
-                
-        URL url = new URL("http://autoc.finance.yahoo.com/autoc?query="+symbol+"&region=US&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback");
-                
-        BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
-        String inputLine;
-        String error ="/**/YAHOO.Finance.SymbolSuggest.ssCallback({\"ResultSet\":{\"result\":null,\"error\":{\"code\":\"internal-error\",\"description\":\"Timeout after";
-       
-        inputLine = in.readLine();
-                
-        /* 
+
+    public static void showVariants(String symbol) {
+
+        lab1:
+        try {
+
+            URL url = new URL("http://autoc.finance.yahoo.com/autoc?query=" + symbol + "&region=US&lang=en-US&callback=YAHOO.Finance.SymbolSuggest.ssCallback");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(url.openStream()));
+            String inputLine;
+            String error = "/**/YAHOO.Finance.SymbolSuggest.ssCallback({\"ResultSet\":{\"result\":null,\"error\":{\"code\":\"internal-error\",\"description\":\"Timeout after";
+
+            inputLine = in.readLine();
+
+            /* 
            labl - метка, она используется по следующей причине:
            иногда сервер autoc.finance.yahoo.com выдает ошибку (выше error)
            ниже цикл проверяет: вернул ли сервер при вызове этого метода ошибку,
@@ -50,16 +48,15 @@ public class AutoComplete {
            and then uses break lab1 - the output from the code block labeled with a label
            so method does not continue executing, as the list of tickers has already been received 
            and there is no need to execute remaining code
-        */     
-        
-        if (inputLine.contains(error)){
-            
+             */
+            if (inputLine.contains(error)) {
+
                 showVariants(symbol);
                 in.close();
                 break lab1;
             }
-        
-        /* 
+
+            /* 
            http://autoc.finance.yahoo.com/autoc?query - возвращает список тикеров в json формате
            org.json - библиотека, которая позволяет преобразовать этот формат в удобный вид
            код ниже:
@@ -73,40 +70,35 @@ public class AutoComplete {
            1) truncates inputLine to the desired json format, because originally the url
                contains unnecessary characters
            2) add the tickers in an array ra type JSONArray
-        */
-        
-        if (inputLine != null){
-                        
-            String jsonFormat = inputLine.substring(39, inputLine.length()-2 );
+             */
+            if (inputLine != null) {
 
-               JSONObject js = null;
-	        try {
-				js = new JSONObject(jsonFormat);
-				JSONArray ra = js.getJSONObject("ResultSet").getJSONArray("Result");
-                                tickersList = ra;
-				for(int i=0;i<ra.length();++i)
-				{
-					JSONObject item = ra.getJSONObject(i);
-					String s = "";
-					s+=item.getString("symbol") + " ";
-					s+=item.getString("name");
-					s+="(" + item.getString("exch") + ")";
-                                        
-				}
-				
-			} catch (JSONException e) {
-				
-				e.printStackTrace();
-			}
+                String jsonFormat = inputLine.substring(39, inputLine.length() - 2);
 
-            
-            
-        }
-        
-        in.close();
+                JSONObject js = null;
+                try {
+                    js = new JSONObject(jsonFormat);
+                    JSONArray ra = js.getJSONObject("ResultSet").getJSONArray("Result");
+                    tickersList = ra;
+                    for (int i = 0; i < ra.length(); ++i) {
+                        JSONObject item = ra.getJSONObject(i);
+                        String s = "";
+                        s += item.getString("symbol") + " ";
+                        s += item.getString("name");
+                        s += "(" + item.getString("exch") + ")";
 
-        
+                    }
+
+                } catch (JSONException e) {
+
+                    e.printStackTrace();
+                }
+
+            }
+
+            in.close();
+
         } catch (IOException e) {
         }
-}
     }
+}

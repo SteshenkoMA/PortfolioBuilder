@@ -9,7 +9,6 @@ package main;
  *
  * @author maxim
  */
-
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
@@ -27,7 +26,6 @@ import panelSetup.StatisticPanelSetup;
 
    This class which is responsible for graphical interface
  */
-
 public class GUI {
 
     private JTextField stockSymbol;
@@ -42,11 +40,11 @@ public class GUI {
     private GridBagConstraints gbc;
 
     public GUI() {
-        
+
         gbc = new GridBagConstraints();
         gbc.anchor = GridBagConstraints.FIRST_LINE_START;
         gbc.insets = new Insets(0, 0, 0, 0);
-    
+
     }
 
     public void displayGUI() {
@@ -57,37 +55,25 @@ public class GUI {
         mainPanel = new JPanel(new GridBagLayout());
         rightPanel = new JPanel(new GridBagLayout());
         leftPanel = new JPanel(new GridBagLayout());
-     
+
         inputPanel = getPanel();
         inputPanel.setLayout(new GridBagLayout());
-        
+
         portfoliosPanel = getPanel();
         portfoliosPanel.setLayout(new GridBagLayout());
-        
-         JPanel aportfoliosPanel = getPanel();
-        aportfoliosPanel .setLayout(new GridBagLayout());
-   
+
         statisticsPanel = getPanel();
         statisticsPanel.setLayout(new GridBagLayout());
 
         graphPanel = getPanel();
         graphPanel.setLayout(new BorderLayout());
-        
-        
-       JPanel oinputPanel = getPanel();
-        oinputPanel.setLayout(new GridBagLayout());
-        InputPanelSetup oiPanelSetup = new InputPanelSetup(oinputPanel, portfoliosPanel, statisticsPanel, stockSymbol, jsonFormat);
-       JPanel qportfoliosPanel = getPanel();
-        qportfoliosPanel.setLayout(new GridBagLayout());
- PortfoliosPanelSetup qportfoliosPanelSetup = new PortfoliosPanelSetup(qportfoliosPanel, statisticsPanel, jsonFormat);
-        
-         PortfoliosPanelSetup aportfoliosPanelSetup = new PortfoliosPanelSetup(portfoliosPanel, statisticsPanel, jsonFormat);
-       StatisticPanelSetup statisticsPanelSetup = new StatisticPanelSetup(statisticsPanel);
+
+        //Настраиваем панели
+        //Setup the panels
+        StatisticPanelSetup statisticsPanelSetup = new StatisticPanelSetup(statisticsPanel);
         PortfoliosPanelSetup portfoliosPanelSetup = new PortfoliosPanelSetup(portfoliosPanel, statisticsPanel, jsonFormat);
-        InputPanelSetup redPanelSetup = new InputPanelSetup(inputPanel, portfoliosPanel, statisticsPanel, stockSymbol, jsonFormat);
+        InputPanelSetup inputPanelSetup = new InputPanelSetup(inputPanel, portfoliosPanel, statisticsPanel, stockSymbol, jsonFormat);
 
-
-   
         /*
          __ __ __ __ __ __ __ __ __ __ __ __ __ __ __ 
         |mainPanel                                   |
@@ -105,12 +91,10 @@ public class GUI {
         |__ __ __ __ __ __ __ __ __ __ __ __ __ __ __|
         
          */
-        
         addComp(leftPanel, inputPanel, 0, 0, 1, 1,
                 GridBagConstraints.BOTH, 0.7, 0.7);
         addComp(leftPanel, portfoliosPanel, 0, 1, 1, 1,
                 GridBagConstraints.BOTH, 0.3, 0.3);
-        
 
         addComp(rightPanel, graphPanel, 0, 0, 1, 1,
                 GridBagConstraints.BOTH, 0.7, 0.7);
@@ -122,7 +106,6 @@ public class GUI {
         addComp(mainPanel, rightPanel, 1, 0, 1, 1,
                 GridBagConstraints.BOTH, 0.7, 0.7);
 
-
         frame.setContentPane(mainPanel);
         frame.setSize(800, 600);
         frame.setLocationRelativeTo(null);;
@@ -130,9 +113,9 @@ public class GUI {
     }
 
     private void addComp(JPanel panel, JComponent comp,
-                         int x, int y, int width, int height,
-                         int fill, double weightx, double weighty) {
-        
+            int x, int y, int width, int height,
+            int fill, double weightx, double weighty) {
+
         gbc.gridx = x;
         gbc.gridy = y;
         gbc.gridwidth = width;
@@ -142,14 +125,14 @@ public class GUI {
         gbc.weighty = weighty;
 
         panel.add(comp, gbc);
-        
+
     }
 
     private JPanel getPanel() {
-        
+
         JPanel panel = new JPanel();
         panel.setOpaque(true);
-    
+
         return panel;
     }
 

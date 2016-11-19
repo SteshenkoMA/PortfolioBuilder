@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 //Данный класс переходит на http://ichart.finance.yahoo.com, выбирает нужную котировку, считывает ее исторические данные и формирует коллекцию quotesList, из который будут запрашиваться исторические данные
+//This class goes on http://ichart.finance.yahoo.com selects the desired quotation, it reads the historical data and forms collection quotesList of which will be requested historical data
 public class ParserQuotes {
 
     private Map<String, Map> quotesList = new TreeMap<>();
@@ -15,6 +16,7 @@ public class ParserQuotes {
     public ParserQuotes(ArrayList<String> tickers, GregorianCalendar start, GregorianCalendar end) {
 
         //Считываем исторические данные каждого тикера
+        //Read the historical data for each ticker
         for (String symbol : tickers) {
             makeQuoteData(symbol, start, end);
         }
@@ -25,6 +27,7 @@ public class ParserQuotes {
     }
 
     //makeQuoteArray - этот метод считывает данные тикера с заданного url и заносит данные в quotesList
+    //makeQuoteArray - this method reads the Ticker data from the specified url and enters the data into quotesList
     public void makeQuoteData(String symbol, GregorianCalendar start, GregorianCalendar end) {
 
         Map<Date, Double> dataItem = new TreeMap<>();
@@ -45,6 +48,7 @@ public class ParserQuotes {
             DateFormat df = new SimpleDateFormat("y-M-d");
 
             //Считываем построчно csv, заданный в url. Нужные нам данные разделены зяпятой
+            //Read csv line by line, specified in the url. We need the data separated zapatos
             String inputLine;
             in.readLine();
             while ((inputLine = in.readLine()) != null) {
@@ -59,7 +63,9 @@ public class ParserQuotes {
                 double adjClose = Double.parseDouble(st.nextToken());
 
                 //Заносим дату и соответствущую ей котировку в dataItem
+                //Write date and matching her quote in the dataItem
                 dataItem.put(date, adjClose); //Нас интересует только Adjusted closing price
+                //We are interested only in Adjusted closing price
 
             }
 
@@ -69,6 +75,7 @@ public class ParserQuotes {
         }
 
         //Добавляем называние тикера и его исторические данные в коллекцию
+        //Add the name of the Ticker and its historical data collection
         quotesList.put(symbol, dataItem);
 
     }
