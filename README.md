@@ -22,7 +22,7 @@ This program builds a portfolio of selected stocks.
 • There is the autocomplete when you type symbol   
 • Compiled program is in the PortfolioBuilder  folder , the startup files : runWindows.bat runLinux.sh   
 
-Used libraries: 
+Used libraries:   
 • org.json – for JSON data format   
 • com.google.collections - for collections   
 • jfreeсharts & jcommon - graph  
