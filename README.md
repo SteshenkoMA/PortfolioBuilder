@@ -12,6 +12,8 @@
 • com.google.collections - для работы с коллекциями  
 • jfreeсharts & jcommon - для построения графика  
 
+См.также: http://www.long-short.ru/post/stroim-portfel-aktsiy-950 
+
 ![portfoliobuilder](https://cloud.githubusercontent.com/assets/13558216/20456041/2f4a66d0-ae7c-11e6-8bb4-2429b7eb5c6d.png)
 
 This program builds a portfolio of selected stocks.
